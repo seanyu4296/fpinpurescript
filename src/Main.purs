@@ -2,22 +2,35 @@ module Main where
 
 import Prelude
 
-import Chapter2 (factorial, findFirst', formatResult, isSorted)
-import Chapter3 (List'(..), Tree(..), append, append', concat, depth, drop, dropWhile, filter, filter', flatMap, foldRight, foldRight', hasSubsequence, init, length', map, map', maximum, reverse, size', zipWith, (:), mapTree)
+import Chapter3 (List'(..), (:))
+import Chapter4 (Option(..), filter, flatMap, getOrElse, map, orElse, variance, sequence)
 import Effect (Effect)
 import Effect.Console (log)
 
 myPrint :: forall a. Show a => a -> Effect Unit
 myPrint = log <<< show
 
-sl :: List' Int
+{- sl :: List' Int
 sl = 1:3:3:2: Nil'
 st :: Tree Int
 st = Branch (Branch(Branch(Leaf 1) (Leaf 2)) (Branch(Leaf 1) (Leaf 2))) (Leaf 4)
+ -}
+o :: Option Int
+o = Some 5
+
+n :: Option Int
+n = None
 
 main :: Effect Unit
 main = do
-  myPrint (mapTree (\x -> x +1) st)
+  myPrint (sequence (Some(1): Some(2): Nil'))
+  myPrint (variance (1.0:2.0: Nil'))
+  myPrint (map (_ + 1) o)
+  myPrint (filter (_ > 1) o)
+  myPrint (getOrElse 1 n)
+  myPrint (flatMap (\x -> o) o)
+  myPrint (orElse o n)
+  -- myPrint (mapTree (\x -> x +1) st)
   -- myPrint (maximum st)
   -- myPrint (depth st)
   -- myPrint (map)

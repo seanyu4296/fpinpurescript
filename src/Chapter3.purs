@@ -120,15 +120,15 @@ filter' :: forall a. (a -> Boolean) -> List' a -> List' a
 filter' f l = flatMap (\x -> if (f x) then x : Nil' else Nil') l
 
 zipWith :: forall a b c. (a -> b -> c) -> List' a -> List' b -> List' c
-zipWith f a b = case Tuple a b of 
-  Tuple (Cons' x xs) (Cons' y ys) -> Cons' (f x y) (zipWith f xs ys)
-  Tuple _ _ -> Nil'
+zipWith f a b = case a, b of 
+  (Cons' x xs), (Cons' y ys) -> Cons' (f x y) (zipWith f xs ys)
+  _, _ -> Nil'
 -- 1 : 2: 3 : Nil , 4: 5: 6 : Nil, \x y -> x + y = 5 7 9 
 
-hasSubsequence :: List' Int -> List' Int -> Boolean
+hasSubsequence :: forall a. Eq a => List' a -> List' a -> Boolean
 hasSubsequence la la' = loop la la' la'
   where
-    loop :: List' Int -> List' Int -> List' Int -> Boolean
+    loop :: List' a -> List' a -> List' a -> Boolean
     loop a b c = case a, b of
       (Cons' x xs),(Cons' y ys) | x == y -> loop xs ys c
                                 | otherwise -> loop (xs) c c
