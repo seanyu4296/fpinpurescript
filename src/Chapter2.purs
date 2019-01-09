@@ -3,7 +3,8 @@ module Chapter2 (
   factorial,
   formatResult,
   findFirst',
-  isSorted
+  isSorted,
+  compose
 ) where 
 
 import Prelude (negate, otherwise, show, (*), (+), (-), (<=), (<>), (==), (>), (>=))
