@@ -13,6 +13,8 @@ type Stream' a = Lazy (Step a)
 data Step a = Empty' | Cons'' a (Stream' a)
 
 
+infixr 8 Cons'' as ~
+infixr 8 defer as ~>
 
 stringS :: Stream' String
 stringS = defer $ \_ -> Cons'' "a" $ defer (\_ -> Empty') 

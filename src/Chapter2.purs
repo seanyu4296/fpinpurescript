@@ -15,8 +15,6 @@ import Data.Tuple (Tuple(..), fst, snd)
 abs :: Int -> Int
 abs x = if ( x > 0) then -x else x
 
-
-
 factorial :: Int -> Int
 factorial n = go n 1
   where
