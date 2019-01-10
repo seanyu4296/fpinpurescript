@@ -3,7 +3,8 @@ module Main where
 import Prelude
 
 import Chapter3 (List'(..), (:))
-import Chapter4 (Option(..), filter, flatMap, getOrElse, map, orElse, variance, sequence)
+import Chapter4 (Either(..), Option(..), filter, flatMap, getOrElse, map, orElse, sequence, sequenceE, traverse, traverseE, variance)
+import Chapter5 (Stream(..), foldRightS, forAll, take, takeWhile, toList, (|>))
 import Effect (Effect)
 import Effect.Console (log)
 
@@ -21,15 +22,31 @@ o = Some 5
 n :: Option Int
 n = None
 
+s :: Stream Int
+s = (\x -> 1) |> (\x -> 2) |> (\x -> 3) |> (\x -> 4) |>(\x -> 5) |> Empty 
+
+ss :: Stream Int
+ss = Conss (\_ -> 1) (\_ -> Conss(\_ -> 2) (\_ -> Conss (\_ -> 2) (\_ -> Empty)) )
+
 main :: Effect Unit
 main = do
-  myPrint (sequence (Some(1): Some(2): Nil'))
-  myPrint (variance (1.0:2.0: Nil'))
-  myPrint (map (_ + 1) o)
-  myPrint (filter (_ > 1) o)
-  myPrint (getOrElse 1 n)
-  myPrint (flatMap (\x -> o) o)
-  myPrint (orElse o n)
+  myPrint $ forAll (\x -> x > 1) ss
+  -- myPrint (toList $ take 2 ss)
+  -- myPrint (toList $ takeWhile (\x -> x > 0) ss)
+  -- myPrint (foldRightS (\x y -> x + y) (\_ -> 0) ss)
+  -- myPrint (toList s)
+  -- myPrint (traverseE ( 1 : 2 : Nil' ) (\x -> if x > 1 then Left "one is not greater" else Right x))
+  -- myPrint (sequenceE ( Right 1: Left 2: Right 2: Nil'))
+  -- myPrint (sequenceE ( Right 1: Right  2: Nil' :: List' (Either Int Int) ))
+  -- myPrint (traverse (1: 2: Nil') (\x -> if x > 1 then Some x else None))
+  -- myPrint (sequence (Some 2 : Some 1 : Nil'))
+  -- myPrint (sequence (Some(1): Some(2): Nil'))
+  -- myPrint (variance (1.0:2.0: Nil'))
+  -- myPrint (map (_ + 1) o)
+  -- myPrint (filter (_ > 1) o)
+  -- myPrint (getOrElse 1 n)
+  -- myPrint (flatMap (\x -> o) o)
+  -- myPrint (orElse o n)
   -- myPrint (mapTree (\x -> x +1) st)
   -- myPrint (maximum st)
   -- myPrint (depth st)
