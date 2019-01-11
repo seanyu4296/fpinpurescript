@@ -4,7 +4,7 @@ import Prelude
 
 import Chapter3 (List'(..), (:))
 import Chapter4 (Either(..), Option(..), filter, flatMap, getOrElse, map, orElse, sequence, sequenceE, traverse, traverseE, variance)
-import Chapter5 (Stream(..), foldRightS, forAll, take, takeWhile, toList, (|>))
+import Chapter5 (Stream(..), exists, forAll, fromList, take, takeWhile, takeWhile', toList)
 import Effect (Effect)
 import Effect.Console (log)
 
@@ -22,15 +22,19 @@ o = Some 5
 n :: Option Int
 n = None
 
-s :: Stream Int
+{- s :: Stream Int
 s = (\x -> 1) |> (\x -> 2) |> (\x -> 3) |> (\x -> 4) |>(\x -> 5) |> Empty 
 
 ss :: Stream Int
 ss = Conss (\_ -> 1) (\_ -> Conss(\_ -> 2) (\_ -> Conss (\_ -> 2) (\_ -> Empty)) )
-
+ -}
 main :: Effect Unit
 main = do
-  myPrint $ forAll (\x -> x > 1) ss
+  myPrint $ toList $ takeWhile (\x -> x > 0) (fromList (1:2:3:Nil'))
+  myPrint $ exists (\x -> x > 1) (fromList (1:2:3:Nil'))
+  myPrint $ forAll (\x -> x > 1) (fromList (1:2:3:Nil'))
+  myPrint $ toList $ take 3 (fromList (1:2:3:Nil'))
+  myPrint $ toList $ takeWhile (\x -> x > 0) (fromList (1:2:3:Nil'))
   -- myPrint (toList $ take 2 ss)
   -- myPrint (toList $ takeWhile (\x -> x > 0) ss)
   -- myPrint (foldRightS (\x y -> x + y) (\_ -> 0) ss)
